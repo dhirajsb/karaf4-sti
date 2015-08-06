@@ -1,6 +1,6 @@
 FROM fabric8/base-sti
 
-MAINTAINER dhirajsb@gmail.com
+MAINTAINER Dhiraj Bokde <dhirajsb@gmail.com>
 LABEL io.openshift.s2i.scripts-url https://raw.githubusercontent.com/dhirajsb/karaf4-sti/master/.sti/bin/
 
 USER root
