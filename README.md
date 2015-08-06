@@ -47,4 +47,4 @@ A more complete version of the previous example would then be:
 
 ### Real world examples:
 
-	sti build git://github.com/dhirajsb/camel-hello-world dhirajsb/karaf4-sti dhirajsb/camel-hello-world
+	sti build git://github.com/dhirajsb/camel-hello-world dhirajsb/karaf4-sti dhirajsb/camel-hello-world --loglevel=5
