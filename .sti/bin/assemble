@@ -1,0 +1,87 @@
+#!/bin/bash
+
+# restore maven dependencies downloaded in a previous build,
+# so they do not have to be downloaded again.
+# /tmp/artifacts will only be present in the incremental build scenario
+# in which the target image name is an existing docker image which contains
+# dependencies from a prior build execution.
+function restore_saved_artifacts() {
+  if [ -d /tmp/artifacts/ ]; then
+    echo -n "Restoring saved artifacts from prior build..."
+    mv /tmp/artifacts/.m2 ${HOME}/.
+  else 
+    echo -n "Can't find saved artifacts. Ignoring..."
+  fi
+}
+
+# Source code provided to STI is at ${HOME}/source
+LOCAL_SOURCE_DIR=${HOME}/source
+mkdir -p ${LOCAL_SOURCE_DIR}
+
+# The dir that contains the build output
+if [ -z "${OUTPUT_DIR}" ]; then
+  OUTPUT_DIR="${LOCAL_SOURCE_DIR}/target"
+elif [[ ${OUTPUT_DIR} != /* ]]; then
+  OUTPUT_DIR="${LOCAL_SOURCE_DIR}/${OUTPUT_DIR}"
+fi
+
+# Output will result in /opt/jboss folder
+DEPLOY_DIR=/opt/jboss
+mkdir -p ${DEPLOY_DIR}
+
+# Copy the source for compilation
+cp -ad /tmp/src/* ${LOCAL_SOURCE_DIR}
+
+# If a pom.xml is present, this is a normal build scenario
+# so run maven.
+if [ -f "${LOCAL_SOURCE_DIR}/pom.xml" ]; then
+  # restore any maven dependencies which will be present if this is an
+  # incremental build
+  restore_saved_artifacts
+
+  pushd ${LOCAL_SOURCE_DIR} &> /dev/null
+  JAVA_HOME=/etc/alternatives/java_sdk_1.7.0
+
+  if [ -z "${MAVEN_ARGS}" ]; then
+    MAVEN_ARGS="package karaf:assembly karaf:archive -DskipTests -e"
+  fi
+  echo "Found pom.xml... attempting to build with 'mvn ${MAVEN_ARGS}'"
+
+  mvn --version
+  mvn ${MAVEN_ARGS} ${MAVEN_DEBUG_ARGS} | tee .mvn.out
+  cat .mvn.out | grep "properties used" > .mvn.props
+  sed -n 's/.*docker.env.KARAF4_ASSEMBLY=\([^, ]*\),.*/\1/p' .mvn.props | head -n 1 > ${OUTPUT_DIR}/KARAF4_ASSEMBLY
+
+  ERR=$?
+  if [ ${ERR} -ne 0 ]; then
+    echo "Aborting due to error code ${ERR} from mvn command"
+    exit ${ERR}
+  fi
+
+  echo "Copying built artifacts from ${OUTPUT_DIR} into ${DEPLOY_DIR}..."
+  popd &> /dev/null
+else
+  if [ -z "${OUTPUT_DIR}" ]; then
+    OUTPUT_DIR="${LOCAL_SOURCE_DIR}"
+  fi
+  echo "Copying binaries in source directory into ${DEPLOY_DIR}..."
+fi
+
+# locate karaf4 assembly
+fi [ -z "${KARAF4_ASSEMBLY}" ] && [ -f "${OUTPUT_DIR}/KARAF4_ASSEMBLY" ]; then
+  KARAF4_ASSEMBLY=`cat ${OUTPUT_DIR}/KARAF4_ASSEMBLY`
+fi
+KARAF4_ASSEMBLY_ARCHIVE=${OUTPUT_DIR}/${KARAF4_ASSEMBLY}
+if [ ! -f "" ]; then
+  echo "Missing file ${KARAF4_ASSEMBLY_ARCHIVE}"
+  exit 1
+fi
+
+# extract custom assembly to DEPLOY_DIR
+tar xzf "$KARAF4_ASSEMBLY_ARCHIVE" -C /opt/jboss
+ln -s "$DEPLOY_DIR/*" "${DEPLOY_DIR}/karaf"
+
+# send log output to stdout
+sed -i 's/^\(.*rootLogger.*\)out/\1stdout/' /opt/jboss/karaf/etc/org.ops4j.pax.logging.cfg
+
+echo "...done"
