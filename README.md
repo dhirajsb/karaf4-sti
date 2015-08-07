@@ -10,9 +10,9 @@ An image that can be used with Openshift's Source To Image in order to build Kar
 
 The location of the karaf4 assembly built by the maven project can be provided in multiple ways.
 
-- Inside the pom.xml using the docker.env.KARAF4_ASSEMBLY property.
+- Inside the pom.xml using the `docker.env.KARAF4_ASSEMBLY` property.
 - By using the -e flag in sti command (e.g. sti build -e "KARAF4_ASSEMBLY=my-artifactId-1.0-SNAPSHOT.tar.gz" ....).
-- By setting KARAF4_ASSEMBLY property in .sti/environment under the projects source.
+- By setting `KARAF4_ASSEMBLY` property in .sti/environment under the projects source.
 
 ## Customizing the build
 
@@ -27,7 +27,9 @@ It may be possible that the maven build needs to be customized. For example:
 The `MAVEN_ARGS` environment variable can be set to change the behaviour. By
 default `MAVEN_ARGS` is set to:
 
-  install karaf:assembly karaf:archive -DskipTests -e
+  install karaf:assembly karaf:archive -DskipTests -e -X
+
+The -X at the end uses maven debug mode to extract the value of `docker.env.KARAF4_ASSEMBLY` property.
 
 You can override the `MAVEN_ARGS` like in the example below we tell maven to just build the project with groupId "some.groupId" and artifactId "some.artifactId" and all its module dependencies.
 

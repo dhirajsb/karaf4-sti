@@ -43,7 +43,7 @@ if [ -f "${LOCAL_SOURCE_DIR}/pom.xml" ]; then
   JAVA_HOME=/etc/alternatives/java_sdk_1.7.0
 
   if [ -z "${MAVEN_ARGS}" ]; then
-    MAVEN_ARGS="install karaf:assembly karaf:archive -DskipTests -e"
+    MAVEN_ARGS="install karaf:assembly karaf:archive -DskipTests -e -X"
   fi
   echo "Found pom.xml... attempting to build with 'mvn ${MAVEN_ARGS}'"
 
