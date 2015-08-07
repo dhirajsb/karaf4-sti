@@ -79,7 +79,8 @@ fi
 
 # extract custom assembly to DEPLOY_DIR
 tar xzf "$KARAF4_ASSEMBLY_ARCHIVE" -C /opt/jboss
-ln -s "$DEPLOY_DIR/*" "${DEPLOY_DIR}/karaf"
+KARAF4_ASSEMBLY_DIR=${KARAF4_ASSEMBLY_ARCHIVE%.tar.gz}
+ln -s "${DEPLOY_DIR}/${KARAF4_ASSEMBLY_DIR##*/}" "${DEPLOY_DIR}/karaf"
 
 # send log output to stdout
 sed -i 's/^\(.*rootLogger.*\)out/\1stdout/' /opt/jboss/karaf/etc/org.ops4j.pax.logging.cfg
