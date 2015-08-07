@@ -27,7 +27,7 @@ It may be possible that the maven build needs to be customized. For example:
 The `MAVEN_ARGS` environment variable can be set to change the behaviour. By
 default `MAVEN_ARGS` is set to:
 
-  package karaf:assembly karaf:archive -DskipTests -e
+  install karaf:assembly karaf:archive -DskipTests -e
 
 You can override the `MAVEN_ARGS` like in the example below we tell maven to just build the project with groupId "some.groupId" and artifactId "some.artifactId" and all its module dependencies.
 

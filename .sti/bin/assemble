@@ -43,7 +43,7 @@ if [ -f "${LOCAL_SOURCE_DIR}/pom.xml" ]; then
   JAVA_HOME=/etc/alternatives/java_sdk_1.7.0
 
   if [ -z "${MAVEN_ARGS}" ]; then
-    MAVEN_ARGS="package karaf:assembly karaf:archive -DskipTests -e"
+    MAVEN_ARGS="install karaf:assembly karaf:archive -DskipTests -e"
   fi
   echo "Found pom.xml... attempting to build with 'mvn ${MAVEN_ARGS}'"
 
@@ -68,11 +68,11 @@ else
 fi
 
 # locate karaf4 assembly
-fi [ -z "${KARAF4_ASSEMBLY}" ] && [ -f "${OUTPUT_DIR}/KARAF4_ASSEMBLY" ]; then
+if [ -z "${KARAF4_ASSEMBLY}" ] && [ -f "${OUTPUT_DIR}/KARAF4_ASSEMBLY" ]; then
   KARAF4_ASSEMBLY=`cat ${OUTPUT_DIR}/KARAF4_ASSEMBLY`
 fi
 KARAF4_ASSEMBLY_ARCHIVE=${OUTPUT_DIR}/${KARAF4_ASSEMBLY}
-if [ ! -f "" ]; then
+if [ ! -f "${KARAF4_ASSEMBLY_ARCHIVE}" ]; then
   echo "Missing file ${KARAF4_ASSEMBLY_ARCHIVE}"
   exit 1
 fi
