@@ -73,7 +73,7 @@ if [ -z "${KARAF4_ASSEMBLY}" ] && [ -f "${OUTPUT_DIR}/KARAF4_ASSEMBLY" ]; then
 fi
 KARAF4_ASSEMBLY_ARCHIVE=${OUTPUT_DIR}/${KARAF4_ASSEMBLY}
 if [ ! -f "${KARAF4_ASSEMBLY_ARCHIVE}" ]; then
-  echo "Missing file ${KARAF4_ASSEMBLY_ARCHIVE}"
+  echo "Missing assembly archive file ${KARAF4_ASSEMBLY_ARCHIVE}"
   exit 1
 fi
 

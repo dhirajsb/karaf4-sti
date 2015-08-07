@@ -33,7 +33,7 @@ The -X at the end uses maven debug mode to extract the value of `docker.env.KARA
 
 You can override the `MAVEN_ARGS` like in the example below we tell maven to just build the project with groupId "some.groupId" and artifactId "some.artifactId" and all its module dependencies.
 
-	sti build -e "MAVEN_ARGS=install -pl some.groupId:some.artifactId -am" <git repo url> dhirajsb/karaf4-sti <target image name>
+	sti build -e "MAVEN_ARGS=install -pl some.groupId:some.artifactId -am -X" <git repo url> dhirajsb/karaf4-sti <target image name>
 
 You can also just override the `MAVEN_DEBUG_ARGS` environment variable with:
 
@@ -45,7 +45,7 @@ By default the image assumes ./target. If its another directory we need to speci
 
 A more complete version of the previous example would then be:
 
-	sti build -e "OUTPUT_DIR=path/to/module/target,MAVEN_ARGS=install -pl some.groupId:some.artifactId -am" <git repo url> dhirajsb/karaf4-sti <target image name>
+	sti build -e "OUTPUT_DIR=path/to/module/target,MAVEN_ARGS=install -pl some.groupId:some.artifactId -am -X" <git repo url> dhirajsb/karaf4-sti <target image name>
 
 ### Real world examples:
 
