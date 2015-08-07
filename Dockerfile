@@ -1,7 +1,11 @@
 FROM fabric8/base-sti
 
 MAINTAINER Dhiraj Bokde <dhirajsb@gmail.com>
-LABEL io.openshift.s2i.scripts-url https://raw.githubusercontent.com/dhirajsb/karaf4-sti/master/.sti/bin/
+LABEL io.k8s.description="Platform for building and running Karaf4 based applications" \
+            io.k8s.display-name="Karaf4" \
+#            io.openshift.expose-services="8080:http" \
+            io.openshift.s2i.scripts-url=https://raw.githubusercontent.com/dhirajsb/karaf4-sti/master/.sti/bin/ \
+            io.openshift.tags="builder,karaf4"
 
 USER root
 
