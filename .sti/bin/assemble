@@ -85,4 +85,11 @@ ln -s "${DEPLOY_DIR}/${KARAF4_ASSEMBLY_DIR##*/}" "${DEPLOY_DIR}/karaf"
 # send log output to stdout
 sed -i 's/^\(.*rootLogger.*\)out/\1stdout/' /opt/jboss/karaf/etc/org.ops4j.pax.logging.cfg
 
+# cleanup maven build artifacts to reduce image size
+if [ -f "${LOCAL_SOURCE_DIR}/pom.xml" ]; then
+  pushd ${LOCAL_SOURCE_DIR} &> /dev/null
+  mvn clean
+  popd
+fi
+
 echo "...done"
