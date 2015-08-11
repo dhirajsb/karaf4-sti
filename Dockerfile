@@ -8,6 +8,7 @@ LABEL io.k8s.description="Platform for building and running Karaf4 based applica
             io.openshift.s2i.scripts-url=https://raw.githubusercontent.com/dhirajsb/karaf4-sti/master/.sti/bin/ \
 # deprecated script url for backward compatibility
             io.s2i.scripts-url=https://raw.githubusercontent.com/dhirajsb/karaf4-sti/master/.sti/bin/ \
+            io.openshift.s2i.destination=/tmp \
             io.openshift.tags="builder,karaf4"
 
 USER root
