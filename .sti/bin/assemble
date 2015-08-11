@@ -89,6 +89,7 @@ sed -i 's/^\(.*rootLogger.*\)out/\1stdout/' /opt/jboss/karaf/etc/org.ops4j.pax.l
 if [ -f "${LOCAL_SOURCE_DIR}/pom.xml" ]; then
   pushd ${LOCAL_SOURCE_DIR} &> /dev/null
   mvn clean
+  rm .mvn.out .mvn.props
   popd
 fi
 
